@@ -31,7 +31,16 @@ Good luck!
 theorem tendsto_thirtyseven_mul (a : ℕ → ℝ) (t : ℝ) (h : tendsto a t) :
   tendsto (λ n, 37 * a n) (37 * t) :=
 begin
-  sorry,
+  rw tendsto_def at *,
+  intros ep epc,
+  have epc2: 0<(ep/37), linarith,
+  specialize h (ep/37) epc2, 
+  cases h with b lmt,
+  use b, 
+  intros vn vnc, specialize lmt vn vnc,
+  rw ← mul_sub,
+  rw abs_mul,
+  rw abs_of_nonneg, linarith,linarith,
 end
 
 /-- If `a(n)` tends to `t` and `c` is a positive constant then
@@ -39,7 +48,17 @@ end
 theorem tendsto_pos_const_mul {a : ℕ → ℝ} {t : ℝ} (h : tendsto a t)
   {c : ℝ} (hc : 0 < c) : tendsto (λ n, c * a n) (c * t) :=
 begin
-  sorry,
+  rw tendsto_def at *,
+  intros ep epc,
+  have epc2: 0<(ep/c), exact div_pos epc hc,
+  specialize h (ep/c) epc2, 
+  cases h with b lmt,
+  use b, 
+  intros vn vnc, specialize lmt vn vnc,
+  rw ← mul_sub,
+  rw abs_mul,
+  rw abs_of_nonneg, exact (lt_div_iff' hc).mp lmt, 
+  exact le_of_lt hc,
 end
 
 /-- If `a(n)` tends to `t` and `c` is a negative constant then

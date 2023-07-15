@@ -26,50 +26,65 @@ variables (P Q R S : Prop)
 
 example : P ↔ P :=
 begin
-  sorry
+  simp,
 end
 
 example : (P ↔ Q) → (Q ↔ P) :=
 begin
-  sorry
+  intro pq, 
+  rw pq,
 end
 
 example : (P ↔ Q) ↔ (Q ↔ P) :=
 begin
-  sorry
+  split; {
+  intro pq, rw pq,
+  }
 end
 
 example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) :=
 begin
-  sorry
+  intro pq, intro qr, rw pq,exact qr,
 end
 
 example : P ∧ Q ↔ Q ∧ P :=
 begin
-  sorry
+  split; {
+    intro pq,
+    split, exact pq.right, exact pq.left,
+  }
 end
 
 example : ((P ∧ Q) ∧ R) ↔ (P ∧ (Q ∧ R)) :=
 begin
-  sorry
+  split,
+    intro pqr, split, 
+      exact pqr.left.left, 
+      split, exact pqr.left.right, exact pqr.right,
+    intro pqr, split,
+      split, exact pqr.left, exact pqr.right.left, exact pqr.right.right,
 end
 
 example : P ↔ (P ∧ true) :=
 begin
-  sorry
+  simp,
 end
 
 example : false ↔ (P ∧ false) :=
 begin
-  sorry
+  simp,
 end
 
 example : (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S) :=
 begin
-  sorry
+  intro pq, intro rs, split; {
+    intro pr, split, 
+      rw ← pq, exact pr.left,
+      rw ← rs, exact pr.right,
+  }
 end
 
 example : ¬ (P ↔ ¬ P) :=
 begin
-  sorry,
+  simp,
 end

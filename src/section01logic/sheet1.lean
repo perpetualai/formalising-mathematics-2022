@@ -89,7 +89,7 @@ using `intro`, `exact` and `apply`.
 /-- Every proposition implies itself. -/
 example : P → P :=
 begin
-  sorry
+  intro p, exact p,
 end
 
 /-
@@ -109,28 +109,30 @@ So the next level is asking you prove that `P → (Q → P)`.
 -/
 example : P → Q → P :=
 begin
-  sorry
+  intro p, intro _,exact p,
 end
 
 /-- If we know `P`, and we also know `P → Q`, we can deduce `Q`. 
 This is called "Modus Ponens" by logicians. -/
 example : P → (P → Q) → Q :=
 begin
-  sorry
+  intro p, intro pq, apply pq, exact p,
 end
 
 /-- `→` is transitive. That is, if `P → Q` and `Q → R` are true, then
   so is `P → R`. -/
 example : (P → Q) → (Q → R) → (P → R) :=
 begin
-  sorry,
+  intro pq, intro qr, intro p,
+  apply qr, apply pq, exact p,
 end
 
 -- If `h : P → Q → R` with goal `⊢ R` and you `apply h`, you'll get
 -- two goals! Note that tactics operate on only the first goal.
 example : (P → Q → R) → (P → Q) → (P → R) :=
 begin
-  sorry
+  intro pqr, intro pq, intro p,
+  apply pqr, exact p, apply pq, exact p,
 end
 
 /- 
@@ -146,27 +148,35 @@ variables (S T : Prop)
 
 example : (P → R) → (S → Q) → (R → T) → (Q → R) → S → T :=
 begin
-  sorry
+  intro pr, intro sq, intro rt, intro qr, intro s,
+  apply rt, apply qr, apply sq, exact s,
 end
 
 example : (P → Q) → ((P → Q) → P) → Q :=
 begin
-  sorry
+  intro pq, intro pqp,
+  apply pq, apply pqp, exact pq,
 end
 
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
 begin
-  sorry
+  intro pqr, intro qrp, intro rpq, 
+  apply qrp, intro q, apply pqr, 
+  intro p, exact q,
 end
 
 example : ((Q → P) → P) → (Q → R) → (R → P) → P :=
 begin
-  sorry
+  intro qpp, intro qr, intro rp, 
+  apply qpp,
+  intro q, apply rp, apply qr, exact q,
 end
 
 example : (((P → Q) → Q) → Q) → (P → Q) :=
 begin
-  sorry
+  intro pqqq, intro p,
+  apply pqqq,
+  intro pq, apply pq, exact p,
 end
 
 example :
@@ -174,5 +184,7 @@ example :
   ((((P → P) → Q) → (P → P → Q)) → R) →
   (((P → P → Q) → ((P → P) → Q)) → R) → R :=
 begin
-  sorry
+  intros a b c, 
+  apply b,
+  intro ppq, intro p, intro p2,apply ppq,intro p3,exact p3,
 end
